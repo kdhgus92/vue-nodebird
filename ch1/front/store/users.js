@@ -58,6 +58,15 @@ export const mutations = {
 export const actions = {
   signUp({ commit }, payload) {
     // 서버에 회원가입 요청을 보내는 부분
+    // console.log(this.$axios); // REST 비스무리한 API
+    this.$axios.post("/user", {
+      email: payload.email,
+      nickname: payload.nickname,
+      password: payload.password,
+    });
+    this.$axios.get("/");
+
+    // ***
     commit("setMe", payload);
   },
   logIn({ commit }, payload) {

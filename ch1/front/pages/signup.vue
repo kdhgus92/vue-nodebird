@@ -92,9 +92,10 @@ export default {
     onSubmitForm() {
       if (this.$refs.form.validate()) {
         this.$store
-          .dispatch("users/logIn", {
+          .dispatch("users/signUp", {
             email: this.email,
             nickname: this.nickname,
+            password: this.password,
           })
           .then(() => {
             this.$router.push({
