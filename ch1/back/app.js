@@ -26,6 +26,7 @@ app.use(
     credentials: true,
   })
 );
+app.use("/", express.static("uploads"));
 app.use(express.json()); // app.use 는 res,req를 조작한다.
 app.use(express.urlencoded({ extended: false }));
 // passport 설정

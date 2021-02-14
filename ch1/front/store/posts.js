@@ -1,6 +1,7 @@
 export const state = () => ({
   mainPosts: [],
   hasMorePost: true, //쓸데없는 요청을 막는 것.
+  imagePaths: [],
 });
 
 const totalPosts = 51;
@@ -9,6 +10,7 @@ const limit = 10;
 export const mutations = {
   addMainPost(state, payload) {
     state.mainPosts.unshift(payload);
+    state.imagePaths = [];
   },
   removeMainPost(state, payload) {
     const index = state.mainPosts.findIndex((v) => v.id === payload.id);
@@ -35,12 +37,32 @@ export const mutations = {
     state.mainPosts = state.mainPosts.concat(fakePosts);
     state.hasMorePost = fakePosts.length === limit;
   },
+  concatImagesPaths(state, payload) {
+    state.imagePaths = state.imagePaths.concat(payload); // 추가 업로드를 고려
+  },
+  removeImagePath(state, payload) {
+    state.imagePaths.splice(payload, 1);
+  },
 };
 
 export const actions = {
-  add({ commit }, payload) {
+  add({ commit, state }, payload) {
     //서버에 게시글 등록 요청 보냄
-    commit("addMainPost", payload);
+    this.$axios
+      .post(
+        "http://localhost:3085/post",
+        {
+          content: payload.content,
+          imagePaths: state.imagePaths,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        commit("addMainPost", res.data);
+      })
+      .catch(() => {});
   },
 
   remove({ commit }, payload) {
@@ -54,5 +76,15 @@ export const actions = {
     if (state.hasMorePost) {
       commit("loadPosts");
     }
+  },
+  uploadImages({ commit }, payload) {
+    this.$axios
+      .post("http://localhost:3085/post/images", payload, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        commit("concatImagesPaths", res.data);
+      })
+      .catch(() => {});
   },
 };
