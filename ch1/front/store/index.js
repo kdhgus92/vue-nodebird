@@ -1,9 +1,9 @@
-export const state = () => ({
-  hello: "vuex",
-});
+export const state = () => ({});
 
-export const mutations = {
-  increment(state) {
-    state.hello = "goodbye";
+export const mutations = {};
+
+export const actions = {
+  nuxtServerInit({ commit, dispatch, state }, { req }) {
+    return dispatch("users/loadUser");
   },
 };

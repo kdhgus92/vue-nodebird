@@ -16,10 +16,13 @@ router.get("/", async (req, res, next) => {
           model: db.User,
           attributes: ["id", "nickname"],
         },
+        {
+          model: db.Image,
+        },
       ],
       order: [["createdAt", "DESC"]],
       // 실무에서는 offset과 limit을 안쓴다.
-      offset: parseInt(req.query.offset) || 0,
+      offset: parseInt(req.query.offset, 10) || 0,
       limit: parseInt(req.query.limit, 10) || 10,
     });
     return res.json(posts);

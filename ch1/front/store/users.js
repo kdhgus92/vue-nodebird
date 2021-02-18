@@ -56,15 +56,18 @@ export const mutations = {
 };
 
 export const actions = {
-  loadUser({ commit }) {
-    this.$axios
-      .get("http://localhost:3085/user", {
+  async loadUser({ commit, state }) {
+    console.log("loadUser");
+    try {
+      const res = await this.$axios.get("http://localhost:3085/user", {
         withCredentials: true,
-      })
-      .then((res) => {
-        commit("setMe", res.data);
-      })
-      .catch(() => {});
+      });
+      console.log(res.data);
+      commit("setMe", res.data);
+      console.log(state);
+    } catch (err) {
+      console.error(err);
+    }
   },
   signUp({ commit }, payload) {
     // 서버에 회원가입 요청을 보내는 부분

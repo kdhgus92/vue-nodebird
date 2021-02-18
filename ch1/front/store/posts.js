@@ -64,11 +64,11 @@ export const actions = {
         withCredential: true,
       })
       .then(() => {
-        commit("removeMainPost", payload);
+        commit("removeMainPost", payload.postid);
       })
-      .catch(err)(() => {
-      console.error(err);
-    });
+      .catch((err) => {
+        console.error(err);
+      });
   },
 
   addComment({ commit }, payload) {
@@ -92,8 +92,8 @@ export const actions = {
 
   loadComments({ commit }, payload) {
     this.$axios
-      .get(`http//localhost:3085/post/${payload.postId}/comments`)
-      .then(() => {
+      .get(`http://localhost:3085/post/${payload.postId}/comments`)
+      .then((res) => {
         commit("loadComments", res.data);
       })
       .catch((err) => {
@@ -105,9 +105,9 @@ export const actions = {
     if (state.hasMorePost) {
       this.$axios
         .get(
-          `http//localhost:3085/posts?offset=${state.mainPosts.length}&limit=10`
+          `http://localhost:3085/posts?offset=${state.mainPosts.length}&limit=10`
         )
-        .then(() => {
+        .then((res) => {
           commit("loadPosts", res.data);
         })
         .catch((err) => {
