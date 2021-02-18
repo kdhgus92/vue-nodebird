@@ -53,12 +53,12 @@ export default {
       if (this.$refs.form.validate()) {
         this.$store
           .dispatch("posts/addComment", {
-            id: Date.now(),
+            // id: Date.now(),
             postId: this.postId,
             content: this.content,
-            User: {
-              nickname: this.me.nickname,
-            },
+            // User: {
+            //   nickname: this.me.nickname,
+            // },
           })
           .then(() => {
             this.content = "";

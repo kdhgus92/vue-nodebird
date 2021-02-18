@@ -62,6 +62,9 @@ export default {
   components: {
     LoginForm,
   },
+  fetch({ store }) {
+    store.dispatch("users/loadUser");
+  },
   data() {
     return {
       hashtag: "",

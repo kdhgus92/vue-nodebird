@@ -56,6 +56,16 @@ export const mutations = {
 };
 
 export const actions = {
+  loadUser({ commit }) {
+    this.$axios
+      .get("http://localhost:3085/user", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        commit("setMe", res.data);
+      })
+      .catch(() => {});
+  },
   signUp({ commit }, payload) {
     // 서버에 회원가입 요청을 보내는 부분
     // console.log(this.$axios); // REST 비스무리한 API
