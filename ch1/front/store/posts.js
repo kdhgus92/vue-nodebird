@@ -27,6 +27,8 @@ export const mutations = {
   loadPosts(state, payload) {
     state.mainPosts = state.mainPosts.concat(payload);
     state.hasMorePost = payload.length === limit;
+    console.log("store/posts/loadPosts(mutation)");
+    console.log(state.mainPosts);
   },
   concatImagesPaths(state, payload) {
     state.imagePaths = state.imagePaths.concat(payload); // 추가 업로드를 고려
@@ -41,7 +43,7 @@ export const actions = {
     //서버에 게시글 등록 요청 보냄
     this.$axios
       .post(
-        "http://localhost:3085/post",
+        "/post",
         {
           content: payload.content,
           image: state.imagePaths,
@@ -60,7 +62,7 @@ export const actions = {
 
   remove({ commit }, payload) {
     this.$axios
-      .delete(`http://localhost:3085/post/${payload.postId}`, {
+      .delete(`/post/${payload.postId}`, {
         withCredential: true,
       })
       .then(() => {
@@ -74,7 +76,7 @@ export const actions = {
   addComment({ commit }, payload) {
     this.$axios
       .post(
-        `http://localhost:3085/posts/${payload.postId}/comment`,
+        `/posts/${payload.postId}/comment`,
         {
           content: payload.content,
         },
@@ -92,7 +94,7 @@ export const actions = {
 
   loadComments({ commit }, payload) {
     this.$axios
-      .get(`http://localhost:3085/post/${payload.postId}/comments`)
+      .get(`/post/${payload.postId}/comments`)
       .then((res) => {
         commit("loadComments", res.data);
       })
@@ -101,23 +103,40 @@ export const actions = {
       });
   },
 
-  loadPosts({ commit, state }, payload) {
-    if (state.hasMorePost) {
-      this.$axios
-        .get(
-          `http://localhost:3085/posts?offset=${state.mainPosts.length}&limit=10`
-        )
-        .then((res) => {
-          commit("loadPosts", res.data);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+  // loadPosts({ commit, state }, payload) {
+  //   if (state.hasMorePost) {
+  //     console.log("store/posts/(actions) inside if");
+  //     var result = this.$axios
+  //       .get(`/posts?offset=${state.mainPosts.length}&limit=10`)
+  //       .then((res) => {
+  //         // .then 내부가 실행되지 않음
+  //         console.log(res.data);
+  //         commit("loadPosts", res.data);
+  //       })
+  //       .catch((err) => {
+  //         console.error(err);
+  //       });
+  //   }
+  //   console.log(result);
+  //   console.log("store/posts/loadPosts(actions) end");
+  // },
+
+  async loadPosts({ commit, state }, payload) {
+    try {
+      if (state.hasMorePost) {
+        const res = await this.$axios.get(
+          `/posts?offset=${state.mainPosts.length}&limit=10`
+        );
+        commit("loadPosts", res.data);
+      }
+    } catch (err) {
+      console.error(err);
     }
   },
+
   uploadImages({ commit }, payload) {
     this.$axios
-      .post(`http://localhost:3085/post/images`, payload, {
+      .post(`/post/images`, payload, {
         withCredentials: true,
       })
       .then((res) => {

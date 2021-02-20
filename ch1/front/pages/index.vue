@@ -22,6 +22,7 @@ export default {
       name: "Nuxt.js",
     };
   },
+
   computed: {
     me() {
       return this.$store.state.users.me;
@@ -33,9 +34,19 @@ export default {
       return this.$store.state.posts.hasMorePost;
     },
   },
-  fetch({ store }) {
-    store.dispatch("posts/loadPosts");
+
+  asyncData() {
+    console.log("asyncData");
+    return {};
   },
+
+  async fetch({ store }) {
+    console.log("fetch");
+    const result = await store.dispatch("posts/loadPosts");
+    console.log("fetch end");
+    return result;
+  },
+
   mounted() {
     window.addEventListener("scroll", this.onScroll);
   },

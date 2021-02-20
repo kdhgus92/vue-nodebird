@@ -152,4 +152,12 @@ router.post("/:id/comment", isLoggedIn, async (req, res, next) => {
   }
 });
 
+router.post("/:id/retweet", isLoggedIn, async (req, res, next) => {
+  try {
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+});
+
 module.exports = router;

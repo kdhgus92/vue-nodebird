@@ -10,6 +10,7 @@ const router = express.Router();
 router.get("/", async (req, res, next) => {
   // GET /posts?offset=10&limit=10
   try {
+    console.log("get /posts?offset=10&limit=10");
     const posts = await db.Post.findAll({
       include: [
         {
