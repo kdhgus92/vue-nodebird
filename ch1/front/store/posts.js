@@ -36,6 +36,19 @@ export const mutations = {
   removeImagePath(state, payload) {
     state.imagePaths.splice(payload, 1);
   },
+  likePost(state, payload) {
+    const index = state.mainPosts.findIndex((v) => v.id === payload.postId);
+    state.mainPosts[index].Likers.push({
+      id: payload.userId,
+    });
+  },
+  unlikePost(state, payload) {
+    const index = state.mainPosts.findIndex((v) => v.id === payload.postId);
+    const userIndex = state.mainPosts[index].Likers.findIndex(
+      (v) => v.id === payload.usersId
+    );
+    state.mainPosts[index].Likers.splice(userIndex, 1);
+  },
 };
 
 export const actions = {
@@ -63,7 +76,7 @@ export const actions = {
   remove({ commit }, payload) {
     this.$axios
       .delete(`/post/${payload.postId}`, {
-        withCredential: true,
+        withCredentials: true,
       })
       .then(() => {
         commit("removeMainPost", payload.postid);
@@ -91,7 +104,6 @@ export const actions = {
         console.error(err);
       });
   },
-
   loadComments({ commit }, payload) {
     this.$axios
       .get(`/post/${payload.postId}/comments`)
@@ -102,25 +114,6 @@ export const actions = {
         console.error(err);
       });
   },
-
-  // loadPosts({ commit, state }, payload) {
-  //   if (state.hasMorePost) {
-  //     console.log("store/posts/(actions) inside if");
-  //     var result = this.$axios
-  //       .get(`/posts?offset=${state.mainPosts.length}&limit=10`)
-  //       .then((res) => {
-  //         // .then 내부가 실행되지 않음
-  //         console.log(res.data);
-  //         commit("loadPosts", res.data);
-  //       })
-  //       .catch((err) => {
-  //         console.error(err);
-  //       });
-  //   }
-  //   console.log(result);
-  //   console.log("store/posts/loadPosts(actions) end");
-  // },
-
   async loadPosts({ commit, state }, payload) {
     try {
       if (state.hasMorePost) {
@@ -133,7 +126,6 @@ export const actions = {
       console.error(err);
     }
   },
-
   uploadImages({ commit }, payload) {
     this.$axios
       .post(`/post/images`, payload, {
@@ -141,6 +133,56 @@ export const actions = {
       })
       .then((res) => {
         commit("concatImagesPaths", res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  },
+  retweet({ commit }, payload) {
+    this.$axios
+      .post(
+        `/post/${payload.postId}/retweet`,
+        {},
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        commit("addMainPost", res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  },
+  likePost({ commit }, payload) {
+    this.$axios
+      .post(
+        `/post/${payload.postId}/like`,
+        {},
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        commit("likePost", {
+          userId: res.data.userId,
+          postId: payload.postId,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  },
+  unlikePost({ commit }, payload) {
+    this.$axios
+      .delete(`/post/${payload.postId}/unlike`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        commit("unlikePost", {
+          userId: res.data.userId,
+          postId: payload.postId,
+        });
       })
       .catch((err) => {
         console.error(err);
