@@ -152,6 +152,7 @@ export const actions = {
       })
       .catch((err) => {
         console.error(err);
+        alert(err.response.data);
       });
   },
   likePost({ commit }, payload) {
