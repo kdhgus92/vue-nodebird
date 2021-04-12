@@ -1,6 +1,6 @@
-const passport = require("passport");
-const local = require("./local");
-const db = require("../models");
+const passport = require('passport');
+const local = require('./local');
+const db = require('../models');
 
 module.exports = () => {
   passport.serializeUser((user, done) => {
@@ -10,17 +10,21 @@ module.exports = () => {
     try {
       const user = await db.User.findOne({
         where: { id },
-        attributes: ["id", "nickname"],
+        attributes: ['id', 'nickname'],
         include: [
           {
-            model: db.User,
-            as: "Followings",
-            attributes: ["id"],
+            model: db.Post,
+            attributes: ['id'],
           },
           {
             model: db.User,
-            as: "Followers",
-            attributes: ["id"],
+            as: 'Followings',
+            attributes: ['id'],
+          },
+          {
+            model: db.User,
+            as: 'Followers',
+            attributes: ['id'],
           },
         ],
       });
