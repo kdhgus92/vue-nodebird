@@ -8,18 +8,18 @@
 </template>
 
 <script>
-import PostCard from "~/components/PostCard";
-import PostForm from "~/components/PostForm";
+import PostCard from '~/components/PostCard';
+import PostForm from '~/components/PostForm';
 
 export default {
   components: {
     PostCard,
-    PostForm,
+    PostForm
   },
 
   data() {
     return {
-      name: "Nuxt.js",
+      name: 'Nuxt.js'
     };
   },
 
@@ -32,23 +32,23 @@ export default {
     },
     hasMorePost() {
       return this.$store.state.posts.hasMorePost;
-    },
+    }
   },
 
   asyncData() {
-    console.log("asyncData");
+    console.log('asyncData');
     return {};
   },
 
   async fetch({ store }) {
-    return await store.dispatch("posts/loadPosts");
+    return await store.dispatch('posts/loadPosts', { reset: true });
   },
 
   mounted() {
-    window.addEventListener("scroll", this.onScroll);
+    window.addEventListener('scroll', this.onScroll);
   },
   beforeDestroy() {
-    window.addEventListener("scroll", this.onScroll);
+    window.addEventListener('scroll', this.onScroll);
   },
   methods: {
     onScroll() {
@@ -57,11 +57,12 @@ export default {
         document.documentElement.scrollHeight - 300
       ) {
         if (this.hasMorePost) {
-          this.$store.dispatch("posts/loadPosts");
+          console.log('scroll');
+          this.$store.dispatch('posts/loadPosts');
         }
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -1,14 +1,11 @@
 const express = require('express');
-const multer = require('multer');
-const path = require('path'); // path 모듈 노드 기본 제공
 
 const db = require('../models');
-const { isLoggedIn } = require('./middlewares');
 
 const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  // GET /posts?offset=10&limit=10
+router.get('/:tag', async (req, res, next) => {
+  // GET /hashtag/:tag?lastId=10&limit=10
   try {
     let where = {};
     if (parseInt(req.query.listId, 10)) {
@@ -21,6 +18,10 @@ router.get('/', async (req, res, next) => {
     const posts = await db.Post.findAll({
       where,
       include: [
+        {
+          model: db.Hashtag,
+          where: { name: decodeURIComponent(req.params.tag) }, //한글일 수 있어서
+        },
         {
           model: db.User,
           attributes: ['id', 'nickname'],

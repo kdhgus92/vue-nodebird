@@ -34,6 +34,7 @@ router.get('/:id', async (req, res, next) => {
       ],
       attributes: ['id', 'nickname'],
     });
+    console.log(user);
     res.json(user);
   } catch (err) {
     console.error(err);
@@ -160,6 +161,40 @@ router.post('/logout', isLoggedIn, (req, res) => {
     req.logout();
     req.session.destroy(); // 선택사항
     return res.status(200).send('로그아웃 되었습니다.');
+  }
+});
+
+router.get('/:id/posts', async (req, res, next) => {
+  try {
+    let where = {
+      UserId: parseInt(req.params.id, 10),
+      RetweetId: null,
+    };
+    if (parseInt(req.query.lastId, 10)) {
+      where[db.Sequelize.Op.lt] = parseInt(req.query.lastId, 10);
+    }
+    const posts = await db.Post.findAll({
+      where,
+      include: [
+        {
+          model: db.User,
+          attributes: ['id', 'nickname'],
+        },
+        {
+          model: db.Image,
+        },
+        {
+          model: db.User,
+          through: 'Like',
+          as: 'Likers',
+          attributes: ['id'],
+        },
+      ],
+    });
+    res.json(posts);
+  } catch (err) {
+    console.error(err);
+    next(err);
   }
 });
 

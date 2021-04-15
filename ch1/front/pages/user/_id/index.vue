@@ -1,5 +1,15 @@
 <template>
   <v-container>
+    <v-card style="margin-bottom: 20px">
+      <v-container>
+        {{ other.nickname }}
+        <v-row>
+          <v-col cols="4">{{ other.Followings.length }} 팔로잉</v-col>
+          <v-col cols="4">{{ other.Followers.length }} 팔로워</v-col>
+          <v-col cols="4">{{ other.Posts.length }} 게시글</v-col>
+        </v-row>
+      </v-container>
+    </v-card>
     <div>
       <post-card v-for="p in mainPosts" :key="p.id" :post="p" />
     </div>
@@ -7,37 +17,48 @@
 </template>
 
 <script>
-import PostCard from "~/components/PostCard";
+import PostCard from '~/components/PostCard';
 
 export default {
   components: {
-    PostCard,
+    PostCard
   },
 
   data() {
     return {
-      name: "Nuxt.js",
+      name: 'Nuxt.js'
     };
   },
+
   computed: {
-    me() {
-      return this.$store.state.users.me;
+    other() {
+      return this.$store.state.users.other;
     },
     mainPosts() {
       return this.$store.state.posts.mainPosts;
-    },
-    hasMorePost() {
-      return this.$store.state.posts.hasMorePost;
-    },
+    }
   },
-  fetch({ store }) {
-    return store.dispatch("posts/loadPosts");
+
+  asyncData() {
+    console.log('asyncData');
+    return {};
   },
+
+  async fetch({ store, params }) {
+    return Promise.all([
+      await store.dispatch('posts/loadUserPosts', {
+        userId: params.id,
+        reset: true
+      }),
+      await store.dispatch('users/loadOther', { userId: params.id })
+    ]);
+  },
+
   mounted() {
-    window.addEventListener("scroll", this.onScroll);
+    window.addEventListener('scroll', this.onScroll);
   },
   beforeDestroy() {
-    window.addEventListener("scroll", this.onScroll);
+    window.addEventListener('scroll', this.onScroll);
   },
   methods: {
     onScroll() {
@@ -46,11 +67,12 @@ export default {
         document.documentElement.scrollHeight - 300
       ) {
         if (this.hasMorePost) {
-          this.$store.dispatch("posts/loadPosts");
+          console.log('scroll');
+          this.$store.dispatch('posts/loadPosts');
         }
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

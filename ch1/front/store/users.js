@@ -3,7 +3,8 @@ export const state = () => ({
   followerList: [],
   followingList: [],
   hasMoreFollowing: true,
-  hasMoreFollower: true
+  hasMoreFollower: true,
+  other: null //남의 정보
 });
 
 const limit = 3;
@@ -11,6 +12,9 @@ const limit = 3;
 export const mutations = {
   setMe(state, payload) {
     state.me = payload;
+  },
+  setOther(state, payload) {
+    state.other = payload;
   },
   changeNickname(state, payload) {
     state.me.nickname = payload.nickname;
@@ -62,12 +66,22 @@ export const actions = {
   async loadUser({ commit, state }) {
     console.log('loadUser');
     try {
-      const res = await this.$axios.get('http://localhost:3085/user', {
+      const res = await this.$axios.get('/user', {
         withCredentials: true
       });
       console.log(res.data);
       commit('setMe', res.data);
       console.log(state);
+    } catch (err) {
+      console.error(err);
+    }
+  },
+  async loadOther({ commit }, payload) {
+    try {
+      const res = await this.$axios.get(`/user/${payload.userId}`, {
+        withCredentials: true
+      });
+      commit('setOther', res.data);
     } catch (err) {
       console.error(err);
     }
