@@ -19,13 +19,14 @@ export const mutations = {
     const index = state.mainPosts.findIndex(v => v.id === payload.postId);
     state.mainPosts.splice(index, 1);
   },
-  addComment(state, payload) {
-    const index = state.mainPosts.findIndex(v => v.id === payload.postId);
-    state.mainPosts[index].Comments.unshift(payload);
-  },
   loadComments(state, payload) {
     const index = state.mainPosts.findIndex(v => v.id === payload.postId);
-    state.mainPosts[index].Comments = payload;
+    // state.mainPosts[index].Comments = payload.data; //실수
+    Vue.set(state.mainPosts[index], 'Comments', payload.data);
+  },
+  addComment(state, payload) {
+    const index = state.mainPosts.findIndex(v => v.id === payload.PostId);
+    state.mainPosts[index].Comments.unshift(payload);
   },
   loadPosts(state, payload) {
     if (payload.reset) {
@@ -94,7 +95,7 @@ export const actions = {
   addComment({ commit }, payload) {
     this.$axios
       .post(
-        `/posts/${payload.postId}/comment`,
+        `/post/${payload.postId}/comment`,
         {
           content: payload.content
         },
@@ -109,15 +110,16 @@ export const actions = {
         console.error(err);
       });
   },
-  loadComments({ commit }, payload) {
-    this.$axios
-      .get(`/post/${payload.postId}/comments`)
-      .then(res => {
-        commit('loadComments', res.data);
-      })
-      .catch(err => {
-        console.error(err);
+  async loadComments({ commit }, payload) {
+    try {
+      const res = await this.$axios.get(`/post/${payload.postId}/comments`);
+      commit('loadComments', {
+        postId: payload.postId,
+        data: res.data
       });
+    } catch (e) {
+      console.error(e);
+    }
   },
   loadPosts: throttle(async function({ commit, state }, payload) {
     try {

@@ -7,8 +7,14 @@ const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 const router = express.Router();
 
 router.get('/', isLoggedIn, async (req, res, next) => {
-  const user = req.user;
-  res.json(user);
+  try {
+    const user = req.user;
+    console.log('이거?');
+    res.json(user);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
 });
 
 router.get('/:id', async (req, res, next) => {

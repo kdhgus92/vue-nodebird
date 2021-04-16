@@ -69,7 +69,6 @@ export const actions = {
       const res = await this.$axios.get('/user', {
         withCredentials: true
       });
-      console.log(res.data);
       commit('setMe', res.data);
       console.log(state);
     } catch (err) {
@@ -91,15 +90,13 @@ export const actions = {
     // console.log(this.$axios); // REST 비스무리한 API
     this.$axios
       .post(
-        'http://localhost:3085/user',
+        '/user',
         {
           email: payload.email,
           nickname: payload.nickname,
           password: payload.password
         },
-        {
-          withCredentials: true
-        }
+        { withCredentials: true }
       )
       .then(res => {
         console.log(res.data);

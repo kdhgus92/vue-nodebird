@@ -38,7 +38,8 @@
       <v-list>
         <v-list-item v-for="c in post.Comments" :key="c.id">
           <v-list-item-avatar color="teal">
-            <span>{{ c.User.nickname[0] }}</span>
+            <!-- <span>{{ c.User.nickname[0] }}</span> -->
+            <span>a</span>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{ c.User.nickname }}</v-list-item-title>
@@ -51,22 +52,22 @@
 </template>
 
 <script>
-import CommentForm from "~/components/CommentForm";
-import PostContent from "~/components/PostContent";
+import CommentForm from '~/components/CommentForm';
+import PostContent from '~/components/PostContent';
 export default {
   components: {
     CommentForm,
-    PostContent,
+    PostContent
   },
   props: {
     post: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
   data() {
     return {
-      commentOpened: false,
+      commentOpened: false
     };
   },
   computed: {
@@ -75,49 +76,49 @@ export default {
     },
     liked() {
       const me = this.$store.state.users.me;
-      return !!(this.post.Likers || []).find((v) => v.id === (me && me.id));
+      return !!(this.post.Likers || []).find(v => v.id === (me && me.id));
     },
     heartIcon() {
-      return this.liked ? "mdi-heart" : "mdi-heart-outline";
-    },
+      return this.liked ? 'mdi-heart' : 'mdi-heart-outline';
+    }
   },
   methods: {
     onRemovePost() {
-      this.$store.dispatch("posts/remove", {
-        postId: this.post.id,
+      this.$store.dispatch('posts/remove', {
+        postId: this.post.id
       });
     },
     onEditPost() {},
     onToggleComment() {
       if (!this.commentOpened) {
-        this.$store.dispatch("posts/loadComments", {
-          postId: this.post.id,
+        this.$store.dispatch('posts/loadComments', {
+          postId: this.post.id
         });
       }
       this.commentOpened = !this.commentOpened;
     },
     onRetweet() {
       if (!this.me) {
-        return alert("로그인이 필요합니다.");
+        return alert('로그인이 필요합니다.');
       }
-      this.$store.dispatch("posts/retweet", {
-        postId: this.post.id,
+      this.$store.dispatch('posts/retweet', {
+        postId: this.post.id
       });
     },
     onClickHeart() {
       if (!this.me) {
-        return alert("로그인이 필요합니다.");
+        return alert('로그인이 필요합니다.');
       }
       if (this.liked) {
-        return this.$store.dispatch("posts/unlikePost", {
-          postId: this.post.id,
+        return this.$store.dispatch('posts/unlikePost', {
+          postId: this.post.id
         });
       }
-      return this.$store.dispatch("posts/likePost", {
-        postId: this.post.id,
+      return this.$store.dispatch('posts/likePost', {
+        postId: this.post.id
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
