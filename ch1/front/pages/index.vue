@@ -41,9 +41,7 @@ export default {
   },
 
   async fetch({ store }) {
-    console.log("fetch");
     const result = await store.dispatch("posts/loadPosts");
-    console.log("fetch end");
     return result;
   },
 

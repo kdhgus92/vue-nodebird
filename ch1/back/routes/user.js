@@ -94,4 +94,23 @@ router.post("/logout", isLoggedIn, (req, res) => {
   }
 });
 
+router.post("/:id/follow", isLoggedIn, async (req, res, next) => {});
+
+router.delete("/:id/follow", isLoggedIn, async (req, res, next) => {});
+
+router.patch("/:id/nickname", isLoggedIn, async (req, res, next) => {
+  try {
+    await db.User.update(
+      {
+        nickname: req.body.nickname,
+      },
+      { where: { id: req.user.id } }
+    );
+    res.send(req.body.nickname);
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+});
+
 module.exports = router;
