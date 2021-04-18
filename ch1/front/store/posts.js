@@ -28,6 +28,9 @@ export const mutations = {
     const index = state.mainPosts.findIndex(v => v.id === payload.PostId);
     state.mainPosts[index].Comments.unshift(payload);
   },
+  loadPost(state, payload) {
+    state.mainPosts = [payload];
+  },
   loadPosts(state, payload) {
     if (payload.reset) {
       state.mainPosts = payload.data;
@@ -119,6 +122,14 @@ export const actions = {
       });
     } catch (e) {
       console.error(e);
+    }
+  },
+  async loadPost({ commit, state }, payload) {
+    try {
+      const res = await this.$axios.get(`/post/${payload}`);
+      commit('loadPost', res.data);
+    } catch (err) {
+      console.error(err);
     }
   },
   loadPosts: throttle(async function({ commit, state }, payload) {
