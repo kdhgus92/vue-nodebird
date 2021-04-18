@@ -9,7 +9,6 @@ const router = express.Router();
 router.get('/', isLoggedIn, async (req, res, next) => {
   try {
     const user = req.user;
-    console.log('이거?');
     res.json(user);
   } catch (e) {
     console.error(e);
@@ -295,11 +294,7 @@ router.delete('/:id/follower', isLoggedIn, async (req, res, next) => {
   }
 });
 
-router.post("/:id/follow", isLoggedIn, async (req, res, next) => {});
-
-router.delete("/:id/follow", isLoggedIn, async (req, res, next) => {});
-
-router.patch("/:id/nickname", isLoggedIn, async (req, res, next) => {
+router.patch('/:id/nickname', isLoggedIn, async (req, res, next) => {
   try {
     await db.User.update(
       {
