@@ -10,19 +10,23 @@
 <script>
 // post/_id.vue
 // post/1   post/2    post
-import PostCard from "~/components/PostCard";
+import PostCard from '~/components/PostCard';
 export default {
   components: {
-    PostCard,
+    PostCard
   },
   computed: {
     post() {
       // _id 값에 들어가는 id가 params 안에 있다.
       return this.$store.state.posts.mainPosts.find(
-        (v) => v.id === parseInt(this.$route.params.id, 10)
+        v => v.id === parseInt(this.$route.params.id, 10)
       );
-    },
+    }
   },
+  async fetch({ store, params }) {
+    console.log('post/_id/index.vue fetch');
+    return await store.dispatch('posts/loadPost', params.id);
+  }
 };
 </script>
 

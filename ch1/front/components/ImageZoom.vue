@@ -25,13 +25,13 @@ export default {
   props: {
     images: {
       type: Array,
-      required: true,
+      required: true
     },
     closeModal: {
       type: Function,
-      required: true,
-    },
-  },
+      required: true
+    }
+  }
 };
 </script>
 

@@ -57,32 +57,32 @@
 
 <script>
 // xs=cols, sm, md, lg, xl
-import LoginForm from "~/components/LoginForm";
+import LoginForm from '~/components/LoginForm';
 export default {
   components: {
-    LoginForm,
+    LoginForm
   },
   // fetch({ store }) {
   //   store.dispatch("users/loadUser");
   // },
   data() {
     return {
-      hashtag: "",
+      hashtag: ''
     };
   },
   computed: {
     name() {
       return this.$store.state.posts.name;
-    },
+    }
   },
   methods: {
     onSearchHashtag() {
       this.$router.push({
-        path: `/hashtag/${this.hashtag}`,
+        path: `/hashtag/${encodeURIComponent(this.hashtag)}`
       });
-      this.hashtag = "";
-    },
-  },
+      this.hashtag = '';
+    }
+  }
 };
 </script>
 
