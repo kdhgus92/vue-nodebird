@@ -52,7 +52,7 @@ router.post('/', isNotLoggedIn, async (req, res, next) => {
     const hash = await bcrypt.hash(req.body.password, 12);
     const exUser = await db.User.findOne({
       where: {
-        email: req.body.email,
+        userId: req.body.userId,
       },
     });
     if (exUser) {
@@ -63,7 +63,7 @@ router.post('/', isNotLoggedIn, async (req, res, next) => {
       });
     }
     await db.User.create({
-      email: req.body.email,
+      userId: req.body.userId,
       password: hash,
       nickname: req.body.nickname,
     }); // HTTP STATUS CODE
@@ -83,7 +83,7 @@ router.post('/', isNotLoggedIn, async (req, res, next) => {
         }
         const fullUser = await db.User.findOne({
           where: { id: user.id },
-          attributes: ['id', 'email', 'nickname'],
+          attributes: ['id', 'userId', 'nickname'],
           include: [
             {
               model: db.Post,
@@ -112,9 +112,9 @@ router.post('/', isNotLoggedIn, async (req, res, next) => {
 
 router.post('/login', isNotLoggedIn, (req, res, next) => {
   /*
-    req.body.email;
+    req.body.userId;
     req.body.password;
-    // email이랑 password 검사
+    // userId이랑 password 검사
     await db.User.findOne();
     // 세션에 저장
     user[cookie] = 유저정보;
@@ -136,7 +136,7 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
       }
       const fullUser = await db.User.findOne({
         where: { id: user.id },
-        attributes: ['id', 'email', 'nickname'],
+        attributes: ['id', 'userId', 'nickname'],
         include: [
           {
             model: db.Post,

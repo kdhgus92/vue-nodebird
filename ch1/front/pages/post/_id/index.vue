@@ -37,7 +37,8 @@ export default {
           content: this.post.content
         },
         {
-          hid: 'ogtitle',
+         // nuxt.config의 head와 개별 페이지의 og:title이 겹칠때 구분 hid. 공식문서 참고
+          hid: 'ogtitle', 
           property: 'og:title',
           content: `${this.post.User.nickname}님의 게시글`
         },

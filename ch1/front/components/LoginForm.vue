@@ -4,10 +4,10 @@
       <v-form ref="form" v-model="valid" @submit.prevent="onSubmitForm">
         <v-container>
           <v-text-field
-            v-model="email"
-            :rules="emailRules"
-            label="이메일"
-            type="email"
+            v-model="userId"
+            :rules="userIdRules"
+            label="아이디"
+            type="userId"
             required
           />
           <v-text-field
@@ -43,12 +43,9 @@ export default {
   data() {
     return {
       valid: false,
-      email: '',
+      userId: '',
       password: '',
-      emailRules: [
-        v => !!v || '이메일은 필수입니다.',
-        v => /.+@.+/.test(v) || '이메일이 유효하지 않습니다.'
-      ],
+      userIdRules: [v => !!v || '아이디는 필수입니다.'],
       passwordRules: [v => !!v || '비밀번호는 필수입니다.']
     };
   },
@@ -63,7 +60,7 @@ export default {
       if (this.$refs.form.validate()) {
         try {
           await this.$store.dispatch('users/logIn', {
-            email: this.email,
+            userId: this.userId,
             password: this.password
           });
           this.$router.push({

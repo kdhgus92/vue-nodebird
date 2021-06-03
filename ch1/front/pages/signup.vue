@@ -6,10 +6,10 @@
           <v-subheader>회원가입</v-subheader>
           <v-form ref="form" v-model="valid" @submit.prevent="onSubmitForm">
             <v-text-field
-              v-model="email"
-              label="이메일"
-              type="email"
-              :rules="emailRules"
+              v-model="userId"
+              label="아이디"
+              type="userId"
+              :rules="userIdRules"
               requered
             />
             <v-text-field
@@ -35,7 +35,7 @@
             />
             <v-checkbox
               v-model="terms"
-              :rules="[(v) => !!v || '약관에 동의해야합니다.']"
+              :rules="[v => !!v || '약관에 동의해야합니다.']"
               required
               label="제로초 말을 잘 들을 것을 약속합니다."
             />
@@ -52,63 +52,60 @@ export default {
   data() {
     return {
       valid: false,
-      email: "",
-      password: "",
-      passwordCheck: "",
-      nickname: "",
+      userId: '',
+      password: '',
+      passwordCheck: '',
+      nickname: '',
       terms: false,
-      emailRules: [
-        (v) => !!v || "이메일은 필수입니다.",
-        (v) => /.+@.+/.test(v) || "이메일이 유효하지 않습니다.",
-      ],
-      nicknameRules: [(v) => !!v || "닉네임은 필수입니다."],
-      passwordRules: [(v) => !!v || "비밀번호는 필수입니다."],
+      userIdRules: [v => !!v || '아이디는 필수입니다.'],
+      nicknameRules: [v => !!v || '닉네임은 필수입니다.'],
+      passwordRules: [v => !!v || '비밀번호는 필수입니다.'],
       passwordCheckRules: [
-        (v) => !!v || "비밀번호 확인은 필수입니다.",
-        (v) => v === this.password || "비밀번호가 일치하지 않습니다.",
-      ],
+        v => !!v || '비밀번호 확인은 필수입니다.',
+        v => v === this.password || '비밀번호가 일치하지 않습니다.'
+      ]
     };
   },
   computed: {
     me() {
       return this.$store.state.users.me;
-    },
+    }
   },
   watch: {
     me(value) {
       if (value) {
         this.$router.push({
-          path: "/",
+          path: '/'
         });
       }
-    },
+    }
   },
   head() {
     return {
-      title: "회원가입",
+      title: '회원가입'
     };
   },
   methods: {
     onSubmitForm() {
       if (this.$refs.form.validate()) {
         this.$store
-          .dispatch("users/signUp", {
-            email: this.email,
+          .dispatch('users/signUp', {
+            userId: this.userId,
             nickname: this.nickname,
-            password: this.password,
+            password: this.password
           })
           .then(() => {
             this.$router.push({
-              path: "/",
+              path: '/'
             });
           })
           .catch(() => {
-            alert("회원가입 실패");
+            alert('회원가입 실패');
           });
       }
-    },
+    }
   },
-  middleware: "anonymous",
+  middleware: 'anonymous'
 };
 </script>
 

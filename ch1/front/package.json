@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nuxt",
-    "build": "nuxt build",
-    "start": "nuxt start",
+    "build": "nuxt build", // 배포  build
+    "start": "nuxt start", // build 된 것 수행
     "lint": "eslint **/*"
   },
   "author": "",

@@ -92,7 +92,7 @@ export const actions = {
       .post(
         '/user',
         {
-          email: payload.email,
+          userId: payload.userId,
           nickname: payload.nickname,
           password: payload.password
         },
@@ -111,7 +111,7 @@ export const actions = {
       .post(
         'http://localhost:3085/user/login',
         {
-          email: payload.email,
+          userId: payload.userId,
           password: payload.password
         },
         {

@@ -57,10 +57,10 @@ module.exports = {
     https: false
   },
   moment: {
-    locales: ['ko']
+    locales: ['ko'] // moment 한국어로 나오도록 설정
   },
   build: {
-    analyze: false,
+    analyze: false, // webpack bundle analyzer라는 파일 생성해준다. 배포전 빌드할 때만 True 
     extend(config, { isClient, isServer, isDev }) {
       if (isServer && !isDev) {
         config.devtool = 'hidden-source-map';
@@ -69,6 +69,6 @@ module.exports = {
     }
   },
   server: {
-    port: 3080
+    port: process.env.PORT || 3081,
   }
 };
